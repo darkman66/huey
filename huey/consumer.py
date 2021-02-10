@@ -241,6 +241,10 @@ class Consumer(object):
                  worker_type=WORKER_THREAD, check_worker_health=True,
                  health_check_interval=10, flush_locks=False):
 
+        if sys.version_info >= (3, 8) and sys.platform.lower() == 'darwin':
+            import multiprocessing
+            multiprocessing.set_start_method('fork')
+
         self._logger = logging.getLogger('huey.consumer')
         if huey.immediate:
             self._logger.warning('Consumer initialized with Huey instance '
